@@ -1,3 +1,5 @@
+version: "3.9"
+
 services:
   web:
     build: .
@@ -9,11 +11,10 @@ services:
       - redis
     ports:
       - "8000:8000"
-    volumes:
-      - .:/app  # Bind mount your code for live updates
     command: >
       sh -c "python manage.py migrate &&
-             python manage.py runserver 0.0.0.0:8000"
+             gunicorn crm.wsgi:application --bind 0.0.0.0:8000"
+    restart: unless-stopped
 
   postgres:
     image: postgres:15
@@ -25,13 +26,15 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data  # Persist DB data
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
 
   redis:
     image: redis:7
     container_name: crm_redis
     ports:
       - "6379:6379"
+    restart: unless-stopped
 
 volumes:
   postgres_data:
