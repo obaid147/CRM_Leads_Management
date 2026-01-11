@@ -103,7 +103,8 @@ CACHES = {
 }
 
 # Celery configuration
-CELERY_BROKER_URL = 'redis://redis:6379/0'  # Redis broker URL (redis is the name of the Redis container in Docker)
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', 'redis://localhost:6379/0')
+#CELERY_BROKER_URL = 'redis://redis:6379/0'  # Redis broker URL (redis is the name of the Redis container in Docker)
 CELERY_ACCEPT_CONTENT = ['json']  # Ensures that the data sent to Celery is serialized as JSON
 CELERY_TASK_SERIALIZER = 'json'  # Task serialization format
 CELERY_RESULT_BACKEND = 'redis://redis:6379/0'  # Where Celery will store results
