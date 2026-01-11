@@ -94,10 +94,17 @@ CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
         'LOCATION': f"redis://{os.environ.get('REDIS_HOST', 'redis')}:{os.environ.get('REDIS_PORT', 6379)}/1",
-        # LOCATION uses the host and port from your .env
+        # LOCATION uses the host and port from our .env
         # /1 → Redis database number (Redis supports multiple databases; 1 is fine for caching)
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
     }
 }
+
+# Celery configuration
+CELERY_BROKER_URL = 'redis://redis:6379/0'  # Redis broker URL (redis is the name of the Redis container in Docker)
+CELERY_ACCEPT_CONTENT = ['json']  # Ensures that the data sent to Celery is serialized as JSON
+CELERY_TASK_SERIALIZER = 'json'  # Task serialization format
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'  # Where Celery will store results
+CELERY_TIMEZONE = 'UTC'  # You can change this to your preferred timezone
