@@ -8,5 +8,4 @@ sqlparse==0.5.3
 tzdata==2025.2
 
 celery==5.4.0
-django-celery-beat==2.6.0
 django-redis==5.4.0
